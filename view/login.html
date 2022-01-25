@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+
+        <style>
+            #form-wrapper {
+                position: absolute;
+                bottom: 50%;
+                left: 50%;
+                transform: translateX(-50%);
+                border: 2px solid black;
+                background: rgb(188, 224, 235);
+                border-radius: 20px;
+                text-align: center;
+            }
+            #form-login {
+                padding: 30px 50px 50px;
+            }
+            input[type="submit"] {
+                padding: 5px 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="form-wrapper">
+            <form action="login" method="post" id="form-login">
+                <h1>Login</h1>
+                <br />
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" />
+                <br /><br />
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" />
+                <br /><br />
+                <input type="submit" value="Login" />
+            </form>
+        </div>
+    </body>
+</html>

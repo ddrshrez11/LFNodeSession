@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+
+        <style>
+            #form-wrapper {
+                position: absolute;
+                bottom: 50%;
+                left: 50%;
+                transform: translateX(-50%);
+                border: 2px solid black;
+                background: rgb(188, 224, 235);
+                border-radius: 20px;
+                text-align: center;
+            }
+            #form-login {
+                padding: 30px 50px 50px;
+            }
+            input[type="submit"] {
+                padding: 5px 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="form-wrapper">
+            <form action="todos" method="post" id="form-login">
+                <h1>Login</h1>
+                <br />
+                <label for="title">Title:</label>
+                <input type="text" name="title" id="title" />
+                <br /><br />
+                <label for="description">Description:</label>
+                <textarea name="description" id="description"></textarea>
+                <br /><br />
+                <label for="status">Status:</label>
+                <input type="text" name="status" id="status" />
+                <br /><br />
+
+                <input type="submit" value="Add ToDo" />
+            </form>
+        </div>
+        <div id="todo"></div>
+
+        <script>
+            const handleDelete = (e) => {
+                let index = e.target.id;
+            };
+
+            const div = document.getElementById("todo");
+            const url = "http://127.0.0.1:5000/todos";
+            fetch(url)
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    data.forEach((todo, index) => {
+                        const { title, description, status } = todo;
+
+                        const h1 = document.createElement("h1");
+                        const h2 = document.createElement("h2");
+                        const p = document.createElement("p");
+                        const btn = document.createElement("button");
+
+                        h1.textContent = title;
+                        h2.textContent = status;
+                        p.textContent = description;
+                        btn.textContent = "Delete";
+                        btn.id = index;
+                        btn.onclick = "handleDelete";
+
+                        div.append(h1);
+                        div.append(h2);
+                        div.append(p);
+                        div.append(btn);
+                    });
+                });
+        </script>
+    </body>
+</html>
