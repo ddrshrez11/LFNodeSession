@@ -1,10 +1,9 @@
 const express = require("express");
+const { route } = require("express/lib/application");
 const app = express();
 const router = express.Router();
 const path = require("path");
 const fs = require("fs");
-const validation = require("./validator");
-const schema = require("./schema");
 
 const port = process.env.PORT || 3000;
 
@@ -81,31 +80,35 @@ router.delete("/todos/:id", (req, res) => {
     }
 });
 
-router.put(
-    "/todos/:title",
-    validation.validateBody(schema.updateTodoSchema),
-    (req, res) => {
-        let data = fs.readFileSync("./data.json");
-        data = JSON.parse(data);
-        let index = data.findIndex((i) => (i.title === req.params.title));
-        console.log(index);
-        if (index !== -1) {
-            data[index].description = req.body.description;
-            data[index].status = req.body.status;
-            var newData = JSON.stringify(data);
-            fs.writeFile("./data.json", newData, (err) => {
-                if (err) throw err;
-                console.log(`Todo ID: ${index} updated.`);
-                res.status(200);
-                res.json({ message: `Todo ID: ${index} updated.` });
-            });
-        } else{
-            console.log("Bad Request");
-            res.status(500);
-            res.json({ message: "Bad Request" });
-        }
+router.put("/todos/:id", (req, res) => {
+    let data = fs.readFileSync("./data.json");
+    data = JSON.parse(data);
+    let updateIndex = req.params.id;
+    if (
+        !req.body.title ||
+        !req.body.description ||
+        !req.body.status ||
+        !data[updateIndex]
+    ) {
+        console.log("Bad Request");
+        res.status(500);
+        res.json({ message: "Bad Request" });
+    } else {
+        data[updateIndex] = {
+            title: req.body.title || data[updateIndex].title,
+            description: req.body.description || data[updateIndex].description,
+            status: req.body.status || data[updateIndex].status,
+        };
+        var newData = JSON.stringify(data);
+
+        fs.writeFile("./data.json", newData, (err) => {
+            if (err) throw err;
+            console.log(`Todo ID: ${updateIndex} updated.`);
+            res.status(200);
+            res.json({ message: `Todo ID: ${updateIndex} updated.` });
+        });
     }
-);
+});
 
 router.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "view/todo.html"));
